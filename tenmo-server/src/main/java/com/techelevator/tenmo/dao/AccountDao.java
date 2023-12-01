@@ -7,8 +7,6 @@ public interface AccountDao {
     // majke method
     Account getAccountById(int account_id);
 
-
-
-
+    Account getAccountByUserId(int user_id);
 
 }

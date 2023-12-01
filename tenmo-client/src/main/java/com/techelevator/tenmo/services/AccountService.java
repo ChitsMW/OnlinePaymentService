@@ -18,21 +18,61 @@ import com.techelevator.tenmo.model.UserCredentials;
 
 public class AccountService {
 
-public String API_BASE_URL = "http://localhost:8080/accounts/";
+    public String API_BASE_URL = "http://localhost:8080";
+    private final RestTemplate restTemplate = new RestTemplate();
+    private String authToken = null;
+    public void setAuthToken(String authToken){
+        this.authToken = authToken;
+    }
 
-    private final RestTemplate restTemplate = new RestTemplate(); // need rest template
-
-    //do method to get account info:
-
-    public Account getAccountById(int accountId){
-
+    public Account getAccountById(int accountId) {
         Account account = null;
-
-        account = restTemplate.getForObject(API_BASE_URL + accountId, Account.class);
-
+        account = restTemplate.getForObject(API_BASE_URL + "/accounts/" + accountId, Account.class);
         return account;
     }
 
+    public Account getAccountByUserId(int userId) {
+        Account account = null;
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setBearerAuth(authToken);
+            HttpEntity <Account> entity = new HttpEntity<>(headers);
+            account = restTemplate.exchange(API_BASE_URL + "/accountsByUserId/" + userId, HttpMethod.GET, entity, Account.class).getBody();
+        } catch (RestClientResponseException e) {
+            System.out.println(e.getMessage());
+        }
+        return account;
+    }
+
+
+//public String API_BASE_URL = "http://localhost:8080";
+//   //public String API_BASE_URL = "http://localhost:8080/accounts/";
+//
+//
+//    private final RestTemplate restTemplate = new RestTemplate(); // need rest template
+//
+//    //do method to get account info:
+//
+////    public Account getAccountById(int accountId){
+////
+////        Account account = null;
+////
+////        account = restTemplate.getForObject(API_BASE_URL + accountId, Account.class);
+////
+////        return account;
+////    }
+//
+//    public Account getAccountById(int accountId) {
+//        Account account = null;
+//        account = restTemplate.getForObject(API_BASE_URL + "/accounts/" + accountId, Account.class);
+//        return account;
+//    }
+//
+//    public Account getAccountByUserId(int userId) {
+//        Account account = null;
+//        account = restTemplate.getForObject(API_BASE_URL + "/accountsByUserId/" + userId, Account.class);
+//        return account;
+//    }
 
 
 
